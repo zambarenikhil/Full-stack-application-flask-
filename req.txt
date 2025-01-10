@@ -1,0 +1,6 @@
+Flask
+Flask-Cors
+newspaper3k
+nltk
+pymongo
+lxml[html_clean]

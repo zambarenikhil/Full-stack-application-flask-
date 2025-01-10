@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+    <title>News Box </title>
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css'>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+<body>
+<h1 style="margin-top:50px" align="center">Full Stack Application Development</h1>
+<br>
+<form method="POST">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 offset-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading"> <span class="glyphicon glyphicon-list-alt"></span><b>News</b></div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+                            <table class="table table-sm mastertable">
+                              <tbody>
+                                <tr class="loader"><td colspan="20" style="text-align: center;"><i class="fas fa-spin fa-2x fa-sync"></i></td></tr>
+                              </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer"> </div>
+                </div>
+                <button type="button" class="pull-right btn btn-default btn-sm" name="next" id="next" onclick="render_news()">
+                    <span class="glyphicon"></span> Next News
+                </button>                
+            </div>
+        </div>
+        <div class="col-md-offset-5">
+            <div class="slider-width200 text-center">
+                <input type="range" id="beleivabilityindex" name="beleivabilityindex" min="0" max="1" step="1">
+                    <label for="beleivabilityindex">Beleivability Index (BI)</label>
+            </div>
+            <div class="slider-width200 text-center">
+                <input type="range" id="priorknowledge" name="priorknowledge" min="0" max="1" step="1">
+                    <label for="priorknowledge">Prior Knowledge (PI)</label>
+            </div>
+        </div>
+        <div>
+            <button type="button" class="pull-right btn btn-primary btn-lg" name="add" id="add">
+                <span class="glyphicon glyphicon-cog"></span> Submit
+            </button>
+            <button type="button" class="pull-left btn btn-success btn-lg" onClick="window.location.href=window.location.href">
+                <span class="glyphicon glyphicon-refresh"></span> Refresh
+            </button>            
+        </div>
+    </div>
+</form>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://www.jqueryscript.net/demo/Responsive-jQuery-News-Ticker-Plugin-with-Bootstrap-3-Bootstrap-News-Box/scripts/jquery.bootstrap.newsbox.min.js'></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+
+<script type="text/javascript">
+
+    function getMetaContent(html, name) {
+      return html.filter(
+      (index, tag) => tag && tag.name && tag.name == name).attr('content');
+    }
+
+    // var i=0;
+    // function render_news() {
+    //     $("tbody").children().remove()
+    //     console.log(i)
+    //     posturl = '/render'
+    //     $.ajax({
+    //         type: "GET",
+    //         url: posturl,
+    //         async: true,
+    //         dataType: 'json',
+    //         crossDomain: true,
+    //         success: function(data, status, xhr) {            
+    //             $('tr.loader').remove();
+    //             tmpl = "<tr><td>Title: <div id=tit></td></tr>\
+    //             <tr><td>Story: <div id=kw></td></tr>\
+    //             <tr><td>Headlines: <div id=des></td></tr>\
+    //             <tr><td>News URL: <div id=newsurl>"+data[i].url+"</div></td></tr>\
+    //             <tr><td>News Claim: <div id=newslabel>"+data[i].label+"</div></td></tr>\
+    //             <tr><td>News Published Date: <div id=newsdate>"+data[i].date+"</div></td></tr>\
+    //             <tr><td>Calims: <div id=claims>"+data[i].claim_url+"</div></td></tr>\
+    //             <tr><td>Images: <div id=img></td></tr>"                
+    //             $("table.mastertable tbody").append(tmpl);
+    //             $.ajax({
+    //                 url: 'https://cors-anywhere.herokuapp.com/' + data[i].url
+    //             }).then(function(data) {
+    //                 var html = $(data);
+    //                 $('#kw').html(getMetaContent(html, 'description'||'twitter:description') || 'no keywords found');
+    //                 $('#des').html(getMetaContent(html, 'keywords'||'twitter:keywords') || 'no description found');
+    //                 var srcitem = (html.find('twitter:image'||'img').attr('src') || 'no image found');
+    //                 var elem = document.createElement("img");
+    //                 elem.setAttribute("src", srcitem);
+    //                 elem.setAttribute("height", "100");
+    //                 elem.setAttribute("width", "150");
+    //                 document.getElementById("img").appendChild(elem);
+    //                 $('#tit').html(getMetaContent(html, 'twitter:title') || 'no title information found');
+    //                 i=i+1;
+    //               });
+    //         }
+    //     });
+    // }
+
+
+    var i=0;
+    function render_news() {
+        $("tbody").children().remove()
+        posturl = '/render'
+        $.ajax({
+            type: "GET",
+            url: posturl,
+            async: true,
+            dataType: 'json',
+            crossDomain: true,
+            success: function(data, status, xhr) {            
+                $('tr.loader').remove();
+                var params = {
+                    _newsurl: data[i].url
+                };
+                var array = JSON.stringify(params);
+                $.ajax({
+                    data: array,
+                    type: "POST",
+                    headers: { "Content-Type": "application/json"},
+                    url :"/processing",
+                    success: function(datafinal) {
+                        tmpl = "<tr><td>Title: <div id=tit></td></tr>\
+                            <tr><td>Story: <div id=kw></div></td></tr>\
+                            <tr><td>Keywords: <div id=keywords>"+datafinal.news_keywords+"</div></td></tr>\
+                            <tr><td>Headlines_1: <div id=des></td></tr>\
+                            <tr><td>Headlines_2: <div id=des_2>"+datafinal.news_summary+"</div></td></tr>\
+                            <tr><td>News URL: <div id=newsurl>"+data[i].url+"</div></td></tr>\
+                            <tr><td>News Published Date: <div id=newsdate>"+data[i].date+"</div></td></tr>\
+                            <tr><td>Calims: <div id=claims>"+data[i].claim_url+"</div></td></tr>\
+                            <tr><td>News Label: <div id=newslabel>"+data[i].label+"</div></td></tr>\
+                            <tr><td>Images:  <img src="+datafinal.news_top_image+" width=300 height=300></td></tr>\
+                            <tr><td>Videos:  <embed src="+datafinal.news_movies+" width=300 height=300></video></td></tr>"
+                        $("table.mastertable tbody").append(tmpl);
+                        $.ajax({
+                            url: 'https://cors-anywhere.herokuapp.com/' + data[i].url
+                        }).then(function(data) {
+                            var html = $(data);
+                            $('#kw').html(getMetaContent(html, 'description'||'twitter:description') || 'no keywords found');
+                            $('#des').html(getMetaContent(html, 'keywords'||'twitter:keywords') || 'no description found');
+                            $('#tit').html(getMetaContent(html, 'twitter:title') || 'no title information found');
+                            i=i+1;
+                          });
+                    },
+                    error: function(err){
+                        console.log(err.responseText)
+                        alert('error. something went wrong')
+                    }
+                });
+            }
+        });
+    }
+
+    // fetch all the params from the front-end and submit them in DB
+    $('#add').on('click',function (){
+        var body = document.getElementById("kw").innerHTML; 
+        var Headlines_1 = document.getElementById("des").innerHTML;
+        var newsurl = document.getElementById("newsurl").innerHTML;
+        var newsdate = document.getElementById("newsdate").innerHTML;
+        var keywords = document.getElementById("keywords").innerHTML;
+        var Headlines_2 = document.getElementById("des_2").innerHTML;
+        var newslabel = document.getElementById("newslabel").innerHTML;
+
+        var params = {
+            _beleivabilityindex : $('#beleivabilityindex').val(),
+            _priorknowledge : $('#priorknowledge').val(),
+            _headline : [{Headlines_1,Headlines_2}],
+            _body : body,
+            _newsurl: newsurl,
+            _newslabel: newslabel,
+            _newsdate:newsdate
+        };
+        var array = JSON.stringify(params);
+        $.ajax({
+            data: array,
+            type: "POST",
+            headers: { "Content-Type": "application/json"},
+            url :"/submit",
+            success: function(data) {
+                alert('Data Submitted to Data-Base Successfully !');
+            },
+            error: function(err){
+                console.log(err.responseText)
+                alert('error. something went wrong')
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
