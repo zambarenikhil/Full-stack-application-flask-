@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: news-box
-        image: suratkarmadhavi/news-box # Replace with your Docker image name
+        image: suratkarmadhavi/news-box:latest # Replace with your Docker image name
         ports:
         - containerPort: 5000
         resources:
