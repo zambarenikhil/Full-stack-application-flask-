@@ -2,5 +2,6 @@ Flask
 Flask-Cors
 newspaper3k
 nltk
+pytest
 pymongo
 lxml[html_clean]
